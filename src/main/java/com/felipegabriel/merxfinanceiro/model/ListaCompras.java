@@ -27,17 +27,17 @@ public class ListaCompras {
 	@Setter
 	private Integer pkListaCompras;
 	
-	@JoinColumn(nullable = false)
+	@Column(nullable = false)
 	@Getter
 	@Setter
 	private String descricao;
 	
-	@JoinColumn(nullable = false)
+	@Column(nullable = false)
 	@Getter
 	@Setter
 	private Date data;
 	
-	@JoinColumn(nullable = false)
+	@Column(name = "listavalor", nullable = false)
 	@Getter
 	@Setter
 	private double listaValor;

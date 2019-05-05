@@ -3,6 +3,7 @@ package com.felipegabriel.merxfinanceiro.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.felipegabriel.merxfinanceiro.model.Usuario;
@@ -14,7 +15,11 @@ public class UsuarioService {
 	@Autowired
 	private UsuarioRepository usuarioRepository;
 	
+	@Autowired
+	private BCryptPasswordEncoder pe;
+	
 	public Usuario salvarUsuario(Usuario usuario) {
+		usuario.setSenha(pe.encode(usuario.getSenha()));
 		return usuarioRepository.save(usuario);
 	}
 	

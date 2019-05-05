@@ -40,6 +40,7 @@ public class Usuario {
 	@Setter
 	private String foto;
 	
+	@Column(name = "usuarioperfil", nullable = false)
 	@Getter
 	@Setter
 	private String usuarioPerfil;
