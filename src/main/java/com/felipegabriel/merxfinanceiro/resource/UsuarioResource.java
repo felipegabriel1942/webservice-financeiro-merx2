@@ -77,5 +77,15 @@ public class UsuarioResource {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
 		}
 	}
+	
+	@GetMapping(value = "/email/{email}")
+	public ResponseEntity<Usuario> listar(@Valid @PathVariable String email){
+		try {
+			Usuario obj = usuarioService.buscarUsuarioPorEmail(email);
+			return ResponseEntity.ok(obj);
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+		}
+	}
 
 }
