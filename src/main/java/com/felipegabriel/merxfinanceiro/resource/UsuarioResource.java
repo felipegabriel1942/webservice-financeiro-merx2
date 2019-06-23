@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.felipegabriel.merxfinanceiro.dto.filter.ParametroPesquisaDTO;
 import com.felipegabriel.merxfinanceiro.model.Usuario;
 import com.felipegabriel.merxfinanceiro.service.UsuarioService;
 
@@ -85,6 +86,16 @@ public class UsuarioResource {
 			@RequestParam(value = "tamanho") Integer tamanho) {
 		try {
 			Page<Usuario> listObj = usuarioService.listarUsuariosPorPaginacao(pagina, tamanho);
+			return ResponseEntity.ok(listObj);
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+		}
+	}
+	
+	@PostMapping(value = "/listar-usuario-paginacao-condiconal")
+	public ResponseEntity<Page<Usuario>> listarUsuarioPaginacaoFilter(@RequestBody List<ParametroPesquisaDTO> parametros) {
+		try {
+			Page<Usuario> listObj = usuarioService.listarUsuariosPorPaginacaoFilter(parametros);
 			return ResponseEntity.ok(listObj);
 		} catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
