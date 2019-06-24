@@ -70,6 +70,7 @@ public class UsuarioService {
 		UsuarioFilter filterPkUsuario = null;
 		UsuarioFilter filterNome = null;
 		UsuarioFilter filterDataNascimento = null;
+		UsuarioFilter filterPerfil = null;
 
 		for (ParametroPesquisaDTO p : parametros) {
 			if (p.getCampo().getNomeCampoObjeto().equals("pkUsuario")) {
@@ -81,6 +82,11 @@ public class UsuarioService {
 				filterNome = new UsuarioFilter(new SearchCriteria("nome", p.getCondicao().getValorCondicao(),
 						p.getParametro1(), p.getParametro2()));
 			}
+			
+			if (p.getCampo().getNomeCampoObjeto().equals("usuarioPerfil")) {
+				filterPerfil = new UsuarioFilter(new SearchCriteria("usuarioPerfil", p.getCondicao().getValorCondicao(),
+						p.getParametro1(), p.getParametro2()));
+			}
 
 			if (p.getCampo().getNomeCampoObjeto().equals("dataNascimento")) {
 				filterDataNascimento = new UsuarioFilter(new SearchCriteria("dataNascimento",
@@ -89,7 +95,7 @@ public class UsuarioService {
 		}
 
 		Page<Usuario> resultado = usuarioRepository
-				.findAll(Specification.where(filterPkUsuario).and(filterNome).and(filterDataNascimento), pageRequest);
+				.findAll(Specification.where(filterPkUsuario).and(filterNome).and(filterDataNascimento).and(filterPerfil), pageRequest);
 
 		return resultado;
 	}

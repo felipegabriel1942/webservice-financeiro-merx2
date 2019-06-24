@@ -27,7 +27,7 @@ public class UsuarioFilter implements Specification<Usuario> {
 
 	@Override
 	public Predicate toPredicate(Root<Usuario> root, CriteriaQuery<?> query, CriteriaBuilder builder) {
-		SimpleDateFormat dateFormat = new SimpleDateFormat("dd/mm/yyyy");
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd");
 
 		switch (criteria.getOperation()) {
 		case "CONTEM":
