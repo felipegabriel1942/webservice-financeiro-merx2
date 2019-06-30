@@ -1,9 +1,21 @@
 package com.felipegabriel.merxfinanceiro.resource;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.sql.SQLException;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import javax.servlet.http.HttpServletResponse;
+import javax.sql.DataSource;
 import javax.validation.Valid;
 
+import org.apache.commons.collections.map.HashedMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -21,7 +33,15 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.felipegabriel.merxfinanceiro.dto.filter.ParametroPesquisaDTO;
 import com.felipegabriel.merxfinanceiro.model.Usuario;
+import com.felipegabriel.merxfinanceiro.repository.UsuarioRepository;
 import com.felipegabriel.merxfinanceiro.service.UsuarioService;
+
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.util.JRLoader;
 
 @RestController
 @RequestMapping(value = "/usuarios")
@@ -30,6 +50,9 @@ public class UsuarioResource {
 
 	@Autowired
 	private UsuarioService usuarioService;
+	
+	@Autowired
+	private DataSource dataSource;
 
 	@PostMapping
 	public ResponseEntity<Usuario> salvar(@Valid @RequestBody Usuario usuario) {
@@ -121,5 +144,20 @@ public class UsuarioResource {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
 		}
 	}
-
+	
+	@GetMapping(value = "/relatorio/usuarios")
+	public void gerarRelatorioUsuariosGeral(HttpServletResponse response) throws JRException, SQLException, IOException {
+		InputStream reportStream = new FileInputStream("C:\\Users\\pinhe\\Documents\\relatorios\\usuarios.jasper");
+		Map<String, Object> params = new HashMap<>();
+		JasperReport jasperReport = (JasperReport) JRLoader.loadObject(reportStream);
+		JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, params, dataSource.getConnection());
+		response.setContentType("application/pdf");
+		response.setHeader("Content-Disposition",
+				"attachment;filename=relatorio-de-usuarios " + new Date().toString() + ".pdf");
+		OutputStream outputStream = response.getOutputStream();
+		JasperExportManager.exportReportToPdfStream(jasperPrint, outputStream);
+	}
+	
+	
+	
 }
